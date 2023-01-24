@@ -3,7 +3,7 @@
 // P2243564
 // DIT/FT/1B/02
 
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, FlatList } from 'react-native'
 import React, { useState } from "react";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AddButton from './AddButton'
@@ -15,6 +15,11 @@ const HomeStackNavigator = () => {
   const [isTomorrowSelected, setTomorrowSelected] = React.useState(false);
   const [isUpcomingSelected, setUpcomingSelected] = React.useState(false);
   const [isCompletedSelected, setCompletedSelected] = React.useState(false);
+
+  const [todayTask, setTodayTask] = React.useState([])
+  const [tomorrowTask, setTomorrowTask] = React.useState([])
+  const [upcomingTask, setUpcomingTask] = React.useState([])
+  const [completedTask, setCompleted] = React.useState([])
 
   const todayPressed = () => {
     setTodaySelected(true)
@@ -45,51 +50,68 @@ const HomeStackNavigator = () => {
   }
 
 
-
-
-
-
-
   return (
     <View style={styles.container}>
-      <ScrollView>
-
-        <View style={styles.greeting}>
-
-          <Text style={styles.greetingTitle}>
-            {"Hello, Daniel"}
-          </Text>
-
-        </View>
 
 
+      <View style={styles.greeting}>
 
-        <View style={styles.tasksSection}>
+        <Text style={styles.greetingTitle}>
+          {"Hello, Daniel"}
+        </Text>
 
-          <View style={{ ...StyleSheet.absoluteFillObject, backgroundColor: '#5C71E6' }} />
-          <View style={{ flex: 1 }}>
-            <View style={{ flex: 1, backgroundColor: 'white', borderTopLeftRadius: 40, borderTopRightRadius: 40, padding: 22 }} >
+      </View>
 
 
-              <View style={styles.taskDayButtons}>
-                <TaskDayButton pressableStyle={[styles.button, { backgroundColor: isTodaySelected ? '#5C71E6' : 'white' }]} textStyle={[styles.dayTitle, { color: isTodaySelected ? 'white' : '#222B45' }]} onPress={todayPressed} Text={"Today"} />
-                <TaskDayButton pressableStyle={[styles.button, { backgroundColor: isTomorrowSelected ? '#5C71E6' : 'white' }]} textStyle={[styles.dayTitle, { color: isTomorrowSelected ? 'white' : '#222B45' }]} onPress={tomorrowPressed} Text={"Tomorrow"} />
-                <TaskDayButton pressableStyle={[styles.button, { backgroundColor: isUpcomingSelected ? '#5C71E6' : 'white' }]} textStyle={[styles.dayTitle, { color: isUpcomingSelected ? 'white' : '#222B45' }]} onPress={upcomingPressed} Text={"Upcoming"} />
-                <TaskDayButton pressableStyle={[styles.button, { backgroundColor: isCompletedSelected ? '#5C71E6' : 'white' }]} textStyle={[styles.dayTitle, { color: isCompletedSelected ? 'white' : '#222B45' }]} onPress={completedPressed} Text={"Completed"} />
-              </View>
 
-              <Task text={"Do Homework"} />
-              <Task text={"Go to School"} />
-              <Task text={"Buy Groceries"} />
+      <View style={styles.tasksSection}>
 
+        <View style={{ ...StyleSheet.absoluteFillObject, backgroundColor: '#5C71E6' }} />
+        <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, backgroundColor: 'white', borderTopLeftRadius: 40, borderTopRightRadius: 40, padding: 22 }} >
+
+
+            <View style={styles.taskDayButtons}>
+              <TaskDayButton pressableStyle={[styles.button, { backgroundColor: isTodaySelected ? '#5C71E6' : 'white' }]} textStyle={[styles.dayTitle, { color: isTodaySelected ? 'white' : '#222B45' }]} onPress={todayPressed} Text={"Today"} />
+              <TaskDayButton pressableStyle={[styles.button, { backgroundColor: isTomorrowSelected ? '#5C71E6' : 'white' }]} textStyle={[styles.dayTitle, { color: isTomorrowSelected ? 'white' : '#222B45' }]} onPress={tomorrowPressed} Text={"Tomorrow"} />
+              <TaskDayButton pressableStyle={[styles.button, { backgroundColor: isUpcomingSelected ? '#5C71E6' : 'white' }]} textStyle={[styles.dayTitle, { color: isUpcomingSelected ? 'white' : '#222B45' }]} onPress={upcomingPressed} Text={"Upcoming"} />
+              <TaskDayButton pressableStyle={[styles.button, { backgroundColor: isCompletedSelected ? '#5C71E6' : 'white' }]} textStyle={[styles.dayTitle, { color: isCompletedSelected ? 'white' : '#222B45' }]} onPress={completedPressed} Text={"Completed"} />
             </View>
 
+
+
+            {isTodaySelected === true && <FlatList
+              data={todayTask}
+              renderItem={({ item }) => <Task todayTask={todayTask} setTodayTask={setTodayTask} id={item.id} text={item.taskName} datetext={item.date} description={item.taskDescription} />}
+              keyExtractor={item => item.id}
+            />}
+
+            {isTomorrowSelected === true && <FlatList
+              data={tomorrowTask}
+              renderItem={({ item }) => <Task tomorrowTask={tomorrowTask} setTomorrowTask={setTomorrowTask} id={item.id} text={item.taskName} datetext={item.date} description={item.taskDescription} />}
+              keyExtractor={item => item.id}
+            />}
+
+            {isUpcomingSelected === true && <FlatList
+              data={upcomingTask}
+              renderItem={({ item }) => <Task upcomingTask={upcomingTask} setUpcomingTask={setUpcomingTask} id={item.id} text={item.taskName} datetext={item.date} description={item.taskDescription} />}
+              keyExtractor={item => item.id}
+            />}
+
+            {isCompletedSelected === true && <FlatList
+              data={upcomingTask}
+              renderItem={({ item }) => <Task completed={completedTask} setCompletedTask = {setCompleted}  task={item} text={item.taskName} datetext={item.date} description={item.taskDescription} />}
+              keyExtractor={item => item.id}
+            />}
+
           </View>
+
         </View>
-      </ScrollView>
+      </View>
 
 
-      <AddButton />
+
+      <AddButton todayTask={todayTask} setTodayTask={setTodayTask} tomorrowTask={tomorrowTask} setTomorrowTask={setTomorrowTask} upcomingTask={upcomingTask} setUpcomingTask={setUpcomingTask} />
 
     </View>
   )

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Switch, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
-import { Picker } from '@react-native-picker/picker';
+
 
 const SettingStackNavigator = () => {
   const [isEnabled, setIsEnabled] = useState(false);

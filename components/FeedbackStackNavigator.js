@@ -6,16 +6,16 @@ import {
   TouchableOpacity,
   Keyboard,
   TouchableWithoutFeedback,
-} from 'react-native'
-import React from 'react'
+} from "react-native";
+import React from "react";
 
 function Input(props) {
   const [name, setName] = React.useState(null);
   const [message, setMessage] = React.useState(null);
 
   const handleReset = () => {
-    setName('');
-    setMessage('');
+    setName("");
+    setMessage("");
   };
 
   return (
@@ -42,7 +42,8 @@ function Input(props) {
         <View style={styles.buttonSpace} />
         <TouchableOpacity
           style={styles.submitButton}
-          onPress={() => console.log('submit button pressed')}>
+          onPress={() => console.log("submit button pressed")}
+        >
           <Text style={styles.submitButtonText}>SUBMIT</Text>
         </TouchableOpacity>
       </View>
@@ -59,27 +60,26 @@ const FeedbackStackNavigator = () => {
         </View>
       </View>
     </TouchableWithoutFeedback>
-  )
-}
+  );
+};
 
-export default FeedbackStackNavigator
+export default FeedbackStackNavigator;
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
   },
 
   inputContainer: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     paddingTop: 200,
   },
 
   header: {
-    backgroundColor: '#5C71E6',
-    height: 110
+    backgroundColor: "#5C71E6",
+    height: 110,
   },
 
   inputName: {
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     margin: 10,
     borderWidth: 2,
     padding: 10,
-    borderColor: '#777',
+    borderColor: "#777",
     width: 350,
     borderRadius: 7,
   },
@@ -97,20 +97,20 @@ const styles = StyleSheet.create({
     margin: 50,
     borderWidth: 2,
     padding: 10,
-    borderColor: '#777',
+    borderColor: "#777",
     width: 350,
     borderRadius: 7,
   },
 
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    width: '83%',
-    marginRight:24,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    width: "83%",
+    marginRight: 24,
   },
 
   submitButton: {
-    backgroundColor: '#5c71e6',
+    backgroundColor: "#5c71e6",
     paddingVertical: 10,
     paddingHorizontal: 18,
     height: 40,
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   },
 
   resetButton: {
-    backgroundColor: '#5c71e6',
+    backgroundColor: "#5c71e6",
     paddingVertical: 10,
     paddingHorizontal: 18,
     height: 40,
@@ -128,17 +128,16 @@ const styles = StyleSheet.create({
   },
 
   submitButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
 
   resetButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
-
-})
+});

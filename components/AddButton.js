@@ -23,9 +23,8 @@ const AddButton = ({
   setTomorrowTask,
   tomorrowTask,
   setUpcomingTask,
-  upcomingTask
+  upcomingTask,
 }) => {
-  
   const [text, onChangeText] = React.useState("");
   const [descriptionText, onChangeDescriptionText] = React.useState("");
   const [date, setDate] = React.useState("");
@@ -79,6 +78,7 @@ const AddButton = ({
         taskName: text,
         taskDescription: descriptionText,
         date: date,
+        isCompleted: false,
         id: Math.random(),
       };
       setTodayTask([...todayTask, newTodo]);
@@ -89,18 +89,18 @@ const AddButton = ({
         taskName: text,
         taskDescription: descriptionText,
         date: date,
+        isCompleted: false,
         id: Math.random(),
       };
       setTomorrowTask([...tomorrowTask, newTodo]);
       // setTextInput('');
       setModalVisible(!isModalVisible);
-    }
-
-    else{
+    } else {
       const newTodo = {
         taskName: text,
         taskDescription: descriptionText,
         date: date,
+        isCompleted: false,
         id: Math.random(),
       };
       setUpcomingTask([...upcomingTask, newTodo]);

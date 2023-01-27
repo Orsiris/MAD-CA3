@@ -2,42 +2,88 @@
 // P2243564
 // DIT/1B/02
 
-import React, { useState, useMemo } from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import React, { useState, useMemo, useContext } from "react";
+import { SafeAreaView, StyleSheet, View, Text } from "react-native";
 import { Agenda } from "react-native-calendars";
 import moment from "moment";
-import Task from "./Task";
+import { TaskContext } from "./Context";
+
 moment().format();
 
-function CalendarPicker(props) {
-  const initDate = "2022-12-26";
-  const [selected, setSelected] = useState(initDate);
-  const marked = useMemo(
-    () => ({
-      "2022-12-26": { marked: true, dotColor: "#5C71E6" },
-      [selected]: {
-        selected: true,
-        selectedColor: "#5C71E6",
-        selectedTextColor: "white",
-      },
-    }),
-    [selected]
-  );
+function CalendarPicker() {
+  const {
+    todayTask,
+    tomorrowTask,
+    upcomingTask,
+    completedTask,
+    
+  } = useContext(TaskContext);
+
+  
+
+  let allTasks = todayTask.concat(tomorrowTask, upcomingTask, completedTask);
+  console.log(completedTask);
+  const items = {};
+
+  allTasks.forEach((task) => {
+    if (!items[task.date]) {
+      items[task.date] = [];
+    }
+    items[task.date].push({
+      taskName: task.taskName,
+      isCompleted: task.isCompleted,
+      date: task.date,
+      id: task.id,
+    });
+  });
+
+  // todayTask.forEach((task) => {
+  //   if (!items[task.date]) {
+  //     items[task.date] = [];
+  //   }
+  //   items[task.date].push({ name: task.taskName });
+  // });
+
+  
 
   return (
     <SafeAreaView style={styles.container}>
       <Agenda
-        selected="2022-12-01"
-        items={{
-          "2022-12-26": [{ name: "Cycling" }],
+        showClosingKnob={true}
+        renderEmptyDate={() => {
+          return (
+            <View>
+            
+            </View>
+          );
         }}
-        renderItem={() => (
-          <View style={styles.item}>
-            <Task text={"Do Homework"} />
-            <Task text={"Go to School"} />
-            <Task text={"Meet with your mom"} />
-          </View>
-        )}
+        renderEmptyData={() => {
+          return (
+            <View>
+             
+            </View>
+          );
+        }}
+        selected={moment().format("YYYY-MM-DD")}
+        items={items}
+        renderItem={(item, firstItemInDay) => {
+          return (
+            <View style={styles.item}>
+              <Text
+                style={[
+                  styles.itemText,
+                  {
+                    textDecorationLine: item?.isCompleted
+                      ? "line-through"
+                      : "none",
+                  },
+                ]}
+              >
+                {item.taskName}
+              </Text>
+            </View>
+          );
+        }}
       />
     </SafeAreaView>
   );
@@ -50,14 +96,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   item: {
+    backgroundColor: "white",
     flex: 1,
     borderRadius: 5,
     padding: 10,
     marginRight: 10,
     marginTop: 17,
+    justifyContent: "center",
+    alignItems: "center",
   },
   itemText: {
     color: "#888",
-    fontSize: 16,
+    fontSize: 24,
   },
 });

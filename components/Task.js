@@ -1,54 +1,155 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import ModalScreen from "./Modal";
 import moment from "moment";
+import { TaskContext } from "./Context";
+
 const Task = (props, { task }) => {
   const [isModalVisible, setModalVisible] = useState(false);
- 
+  const {
+    todayTask,
+    setTodayTask,
+    tomorrowTask,
+    setTomorrowTask,
+    upcomingTask,
+    setUpcomingTask,
+    completedTask,
+    setCompletedTask,
+  } = useContext(TaskContext);
+
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
+  // const completeTask = (todoId) => {
+  //   const newTodosItem = props.todayTask.map((item) => {
+  //     if (item.id == todoId) {
+  //       return { ...item, isCompleted: true };
+  //     }
+  //     return item;
+  //   });
+
+  //   props.setCompletedTask(newTodosItem);
+  // };
+
   const completeTask = (todoId) => {
-    if (props.datetext == moment().format("DD MMM")) {
-      setCheckboxState(!checkboxState);
-      const filteredItem = props.todayTask.find((item) => item.id === todoId);
-      const newTodosItem = props.todayTask.filter((item) => item.id !== todoId);
-      props.setTodayTask(newTodosItem);
+    if (
+      props.datetext == moment().format("YYYY-MM-DD") &&
+      props.isChecked == false
+    ) {
+      const filteredItem = todayTask.find((item) => item.id === todoId);
+
+      const newTodosItem = todayTask.filter((item) => item.id !== todoId);
+
+      setTodayTask(newTodosItem);
 
       const completedItem = {
         taskName: filteredItem.taskName,
         taskDescription: filteredItem.taskDescription,
         date: filteredItem.date,
-        id: Math.random(),
+        isCompleted: true,
+        id: filteredItem.id,
       };
-      console.log(completedItem);
-      props.setCompletedTask([...props.completedTask, completedItem]);
+
+      setCompletedTask([...completedTask, completedItem]);
+    } else if (
+      props.datetext == moment().add(1, "days").format("YYYY-MM-DD") &&
+      props.isChecked == false
+    ) {
+      const filteredItem = tomorrowTask.find((item) => item.id === todoId);
+
+      const newTodosItem = tomorrowTask.filter((item) => item.id !== todoId);
+
+      setTomorrowTask(newTodosItem);
+
+      const completedItem = {
+        taskName: filteredItem.taskName,
+        taskDescription: filteredItem.taskDescription,
+        date: filteredItem.date,
+        isCompleted: true,
+        id: filteredItem.id,
+      };
+
+      setCompletedTask([...completedTask, completedItem]);
+    } else if (
+      props.datetext > moment().add(1, "days").format("YYYY-MM-DD") &&
+      props.isChecked == false
+    ) {
+      const filteredItem = upcomingTask.find((item) => item.id === todoId);
+
+      const newTodosItem = upcomingTask.filter((item) => item.id !== todoId);
+
+      setUpcomingTask(newTodosItem);
+
+      const completedItem = {
+        taskName: filteredItem.taskName,
+        taskDescription: filteredItem.taskDescription,
+        date: filteredItem.date,
+        isCompleted: true,
+        id: filteredItem.id,
+      };
+
+      setCompletedTask([...completedTask, completedItem]);
+    } else {
+      const filteredItem = completedTask.find((item) => item.id === todoId);
+
+      const newTodosItem = completedTask.filter((item) => item.id !== todoId);
+      setCompletedTask(newTodosItem);
+
+      const completedItem = {
+        taskName: filteredItem.taskName,
+        taskDescription: filteredItem.taskDescription,
+        date: filteredItem.date,
+        isCompleted: false,
+        id: filteredItem.id,
+      };
+
+      if (completedItem.date == moment().format("YYYY-MM-DD")) {
+        
+        setTodayTask([...todayTask, completedItem]);
+      } else if (
+        completedItem.date == moment().add(1, "days").format("YYYY-MM-DD")
+      ) {
+        setTomorrowTask([...tomorrowTask, completedItem]);
+      } else if (
+        completedItem.date > moment().add(1, "days").format("YYYY-MM-DD")
+      ) {
+        setUpcomingTask([...upcomingTask, completedItem]);
+      }
     }
   };
 
   const deleteTodo = (todoId) => {
-    if (props.datetext == moment().format("DD MMM")) {
-      const newTodosItem = props.todayTask.filter((item) => item.id != todoId);
-      props.setTodayTask(newTodosItem);
-    } else if (props.datetext == moment().add(1, "days").format("DD MMM")) {
-      const newTodosItem = props.tomorrowTask.filter(
-        (item) => item.id != todoId
-      );
-      props.setTomorrowTask(newTodosItem);
+    if (
+      props.datetext == moment().format("YYYY-MM-DD") &&
+      props.isChecked == false
+    ) {
+      const newTodosItem = todayTask.filter((item) => item.id != todoId);
+      setTodayTask(newTodosItem);
+    } else if (
+      props.datetext == moment().add(1, "days").format("YYYY-MM-DD") &&
+      props.isChecked == false
+    ) {
+      const newTodosItem = tomorrowTask.filter((item) => item.id != todoId);
+      setTomorrowTask(newTodosItem);
+    } else if (
+      props.datetext > moment().add(1, "days").format("YYYY-MM-DD") &&
+      props.isChecked == false
+    ) {
+      const newTodosItem = upcomingTask.filter((item) => item.id != todoId);
+      setUpcomingTask(newTodosItem);
     } else {
-      const newTodosItem = props.upcomingTask.filter(
-        (item) => item.id != todoId
-      );
-      props.setUpcomingTask(newTodosItem);
+      const newTodosItem = completedTask.filter((item) => item.id != todoId);
+
+      setCompletedTask(newTodosItem);
     }
   };
 
   return (
     <View style={styles.item}>
-      <Text style={{ textAlign: "center" }}>{props.datetext}</Text>
+      <Text style={{ textAlign: "center" }}>{moment(props.datetext).format("DD MMM")}</Text>
       <View style={styles.task}>
         <BouncyCheckbox
           size={28}
@@ -57,10 +158,10 @@ const Task = (props, { task }) => {
           innerIconStyle={{ borderWidth: 2 }}
           textStyle={{
             fontFamily: "sans-serif",
-            color: checkboxState ? "#808486" : "#222B45",
+            color: props.isChecked ? "#808486" : "#222B45",
             fontSize: 18,
           }}
-          isChecked={props.checkboxState}
+          isChecked={props.isChecked}
           onPress={() => completeTask(props.id)}
           text={props.text}
         ></BouncyCheckbox>
@@ -100,7 +201,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
-    marginTop: 24,
+    marginTop: 28,
     elevation: 3,
   },
   button: {

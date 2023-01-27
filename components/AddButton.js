@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
 import {
   StyleSheet,
   Pressable,
@@ -7,41 +7,50 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert
 } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-
 import Modal from "react-native-modal";
 import AddTaskModalButtons from "./AddTaskModalButtons";
 import { TextInput } from "react-native-paper";
 import { Calendar } from "react-native-calendars";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
+import { TaskContext } from "./Context";
 
-const AddButton = ({
-  setTodayTask,
-  todayTask,
-  setTomorrowTask,
-  tomorrowTask,
-  setUpcomingTask,
-  upcomingTask,
-}) => {
+const AddButton = () => {
   const [text, onChangeText] = React.useState("");
   const [descriptionText, onChangeDescriptionText] = React.useState("");
   const [date, setDate] = React.useState("");
   const [isModalVisible, setModalVisible] = useState(false);
   const [isCalendar, setCalendarVisible] = useState(false);
 
+  const {
+    todayTask,
+    setTodayTask,
+    tomorrowTask,
+    setTomorrowTask,
+    upcomingTask,
+    setUpcomingTask,
+    completedTask,
+    setCompletedTask,
+  } = useContext(TaskContext);
+
   function DatePicker({ visible, onDateSelected }) {
+    
     return (
-      <Modal visible={visible} transparent={true} animationType="fade">
+      <Modal isVisible={visible} transparent={true} animationType="fade">
         <View style={styles.overlay}>
-          <Calendar onDayPress={onDateSelected} />
+          <Calendar style = {{borderRadius:20, overflow:'hidden'}} enableSwipeMonths = {true} minDate= {moment().format("YYYY-MM-DD")} onDayPress={onDateSelected} />
         </View>
       </Modal>
     );
   }
 
   const toggleModal = () => {
+    onChangeText("")
+    onChangeDescriptionText("")
+    setDate(moment())
     setModalVisible(!isModalVisible);
   };
 
@@ -61,19 +70,20 @@ const AddButton = ({
   };
 
   const addDate = (day) => {
-    var date = moment(day).date();
-    var month = moment(day).month() - 1;
-    var year = moment(day).year();
-    setDate(moment([year, month, date]).format("DD MMM"));
+    setDate(moment(day.dateString).format("YYYY-MM-DD"));
 
     setCalendarVisible(!isCalendar);
   };
 
   const addTodo = () => {
-    const addToday = moment().format("DD MMM");
-    const addTomorrow = moment().add(1, "days").format("DD MMM");
+    const addToday = moment().format("YYYY-MM-DD");
+    const addTomorrow = moment().add(1, "days").format("YYYY-MM-DD");
 
-    if (addToday === date) {
+    if(text.trim() == "" || date == ""){
+     return Alert.alert('Error', 'Please Enter Task Name and Date');
+    }
+
+   else if (addToday === date) {
       const newTodo = {
         taskName: text,
         taskDescription: descriptionText,
@@ -96,6 +106,7 @@ const AddButton = ({
       // setTextInput('');
       setModalVisible(!isModalVisible);
     } else {
+      
       const newTodo = {
         taskName: text,
         taskDescription: descriptionText,
@@ -173,7 +184,7 @@ const AddButton = ({
                   value={descriptionText}
                   onChangeText={onChangeDescriptionText}
                 />
-
+                <View style = {{flexDirection:'row',alignItems:'center'}}>
                 <View style={styles.dateButton}>
                   <Pressable onPress={toggleCalendar}>
                     <Text style={styles.dateText}>Select Date</Text>
@@ -182,6 +193,9 @@ const AddButton = ({
                       onDateSelected={(day) => addDate(day)}
                     />
                   </Pressable>
+                  
+                </View>
+                <Text style = {{marginLeft:20, fontSize:20, marginTop:18}}>{moment(date).format("DD MMM YYYY")}</Text>
                 </View>
               </View>
 

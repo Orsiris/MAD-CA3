@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet } from 'react-native';
 
-import HomeStackNavigator from './HomeStackNavigator';
+import {HomeStackNavigator} from './HomeStackNavigator';
 import CalendarScreen from './CalendarStackScreen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 

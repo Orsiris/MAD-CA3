@@ -3,7 +3,7 @@
 // DIT/FT/1B/02
 
 import { View, Text, StyleSheet, ScrollView, FlatList } from "react-native";
-import React, { useState } from "react";
+import React, { useState, createContext, useContext } from "react";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -11,16 +11,25 @@ import {
 import AddButton from "./AddButton";
 import Task from "./Task";
 import TaskDayButton from "./TaskDayButton";
-const HomeStackNavigator = () => {
+import { TaskContext } from "./Context";
+
+
+export const HomeStackNavigator = () => {
   const [isTodaySelected, setTodaySelected] = React.useState(true);
   const [isTomorrowSelected, setTomorrowSelected] = React.useState(false);
   const [isUpcomingSelected, setUpcomingSelected] = React.useState(false);
   const [isCompletedSelected, setCompletedSelected] = React.useState(false);
 
-  const [todayTask, setTodayTask] = React.useState([]);
-  const [tomorrowTask, setTomorrowTask] = React.useState([]);
-  const [upcomingTask, setUpcomingTask] = React.useState([]);
-  const [completedTask, setCompletedTask] = React.useState([]);
+  const {
+    todayTask,
+    setTodayTask,
+    tomorrowTask,
+    setTomorrowTask,
+    upcomingTask,
+    setUpcomingTask,
+    completedTask,
+    setCompletedTask,
+  } = useContext(TaskContext);
 
   const todayPressed = () => {
     setTodaySelected(true);
@@ -53,7 +62,7 @@ const HomeStackNavigator = () => {
   return (
     <View style={styles.container}>
       <View style={styles.greeting}>
-        <Text style={styles.greetingTitle}>{"Hello, Daniel"}</Text>
+        <Text style={styles.greetingTitle}>{"Hello There!"}</Text>
       </View>
 
       <View style={styles.tasksSection}>
@@ -135,6 +144,7 @@ const HomeStackNavigator = () => {
                     completedTask={completedTask}
                     setCompletedTask={setCompletedTask}
                     setTodayTask={setTodayTask}
+                    isChecked={item.isCompleted}
                     id={item.id}
                     text={item.taskName}
                     datetext={item.date}
@@ -151,7 +161,10 @@ const HomeStackNavigator = () => {
                 renderItem={({ item }) => (
                   <Task
                     tomorrowTask={tomorrowTask}
+                    completedTask={completedTask}
                     setTomorrowTask={setTomorrowTask}
+                    setCompletedTask={setCompletedTask}
+                    isChecked={item.isCompleted}
                     id={item.id}
                     text={item.taskName}
                     datetext={item.date}
@@ -169,6 +182,9 @@ const HomeStackNavigator = () => {
                   <Task
                     upcomingTask={upcomingTask}
                     setUpcomingTask={setUpcomingTask}
+                    completedTask={completedTask}
+                    setCompletedTask={setCompletedTask}
+                    isChecked={item.isCompleted}
                     id={item.id}
                     text={item.taskName}
                     datetext={item.date}
@@ -186,6 +202,12 @@ const HomeStackNavigator = () => {
                   <Task
                     completed={completedTask}
                     setCompletedTask={setCompletedTask}
+                    todayTask={todayTask}
+                    completedTask={completedTask}
+                    tomorrowTask={tomorrowTask}
+                    upcomingTask={upcomingTask}
+                    setUpcomingTask={setUpcomingTask}
+                    isChecked={item.isCompleted}
                     id={item.id}
                     text={item.taskName}
                     datetext={item.date}
@@ -210,8 +232,6 @@ const HomeStackNavigator = () => {
     </View>
   );
 };
-
-export default HomeStackNavigator;
 
 const styles = StyleSheet.create({
   container: {

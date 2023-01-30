@@ -25,6 +25,8 @@ const AddButton = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isCalendar, setCalendarVisible] = useState(false);
 
+  
+
   const {
     todayTask,
     setTodayTask,
@@ -50,7 +52,7 @@ const AddButton = () => {
   const toggleModal = () => {
     onChangeText("")
     onChangeDescriptionText("")
-    setDate(moment())
+    setDate(moment().format("YYYY-MM-DD"))
     setModalVisible(!isModalVisible);
   };
 
@@ -70,6 +72,7 @@ const AddButton = () => {
   };
 
   const addDate = (day) => {
+    
     setDate(moment(day.dateString).format("YYYY-MM-DD"));
 
     setCalendarVisible(!isCalendar);
@@ -78,7 +81,8 @@ const AddButton = () => {
   const addTodo = () => {
     const addToday = moment().format("YYYY-MM-DD");
     const addTomorrow = moment().add(1, "days").format("YYYY-MM-DD");
-
+   
+console.log(date)
     if(text.trim() == "" || date == ""){
      return Alert.alert('Error', 'Please Enter Task Name and Date');
     }

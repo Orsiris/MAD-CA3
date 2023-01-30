@@ -19,10 +19,9 @@ function CalendarPicker() {
     
   } = useContext(TaskContext);
 
-  
+  allTasks = [];
 
-  let allTasks = todayTask.concat(tomorrowTask, upcomingTask, completedTask);
-  console.log(completedTask);
+  allTasks  = allTasks.concat(todayTask, tomorrowTask, upcomingTask, completedTask);
   const items = {};
 
   allTasks.forEach((task) => {
@@ -66,14 +65,14 @@ function CalendarPicker() {
         }}
         selected={moment().format("YYYY-MM-DD")}
         items={items}
-        renderItem={(item, firstItemInDay) => {
+        renderItem={(item) => {
           return (
             <View style={styles.item}>
               <Text
                 style={[
                   styles.itemText,
                   {
-                    textDecorationLine: item?.isCompleted
+                    textDecorationLine: item.isCompleted
                       ? "line-through"
                       : "none",
                   },

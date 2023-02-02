@@ -20,10 +20,11 @@ function CalendarPicker() {
   } = useContext(TaskContext);
 
   allTasks = [];
-
-  allTasks  = allTasks.concat(todayTask, tomorrowTask, upcomingTask, completedTask);
+  // console.log(todayTask);
+  //  console.log(completedTask)
+  allTasks = allTasks.concat(todayTask, tomorrowTask, upcomingTask, completedTask);
   const items = {};
-
+  
   allTasks.forEach((task) => {
     if (!items[task.date]) {
       items[task.date] = [];
@@ -36,6 +37,9 @@ function CalendarPicker() {
     });
   });
 
+  // console.log(allTasks)
+  // console.log(items)
+
   // todayTask.forEach((task) => {
   //   if (!items[task.date]) {
   //     items[task.date] = [];
@@ -43,11 +47,18 @@ function CalendarPicker() {
   //   items[task.date].push({ name: task.taskName });
   // });
 
-  
+  // console.log(items)
+  // console.log(allTasks)
 
   return (
     <SafeAreaView style={styles.container}>
       <Agenda
+      theme={{
+        
+        agendaTodayColor: '#5C71E6',
+
+        
+      }}
         showClosingKnob={true}
         renderEmptyDate={() => {
           return (
@@ -65,7 +76,9 @@ function CalendarPicker() {
         }}
         selected={moment().format("YYYY-MM-DD")}
         items={items}
+        
         renderItem={(item) => {
+          
           return (
             <View style={styles.item}>
               <Text
@@ -83,6 +96,9 @@ function CalendarPicker() {
             </View>
           );
         }}
+        reservationsKeyExtractor={(item) => {
+          return item?.reservation?.id;
+        }}
       />
     </SafeAreaView>
   );
@@ -97,15 +113,17 @@ const styles = StyleSheet.create({
   item: {
     backgroundColor: "white",
     flex: 1,
-    borderRadius: 5,
-    padding: 10,
+   
+   elevation:4,
     marginRight: 10,
     marginTop: 17,
+    marginBottom:5,
     justifyContent: "center",
     alignItems: "center",
+    padding:14,
   },
   itemText: {
-    color: "#888",
+    color: "black",
     fontSize: 24,
   },
 });

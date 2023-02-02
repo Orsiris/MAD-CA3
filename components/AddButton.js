@@ -25,7 +25,7 @@ const AddButton = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isCalendar, setCalendarVisible] = useState(false);
 
-  
+
 
   const {
     todayTask,
@@ -39,11 +39,35 @@ const AddButton = () => {
   } = useContext(TaskContext);
 
   function DatePicker({ visible, onDateSelected }) {
-    
+
     return (
       <Modal isVisible={visible} transparent={true} animationType="fade">
         <View style={styles.overlay}>
-          <Calendar style = {{borderRadius:20, overflow:'hidden'}} enableSwipeMonths = {true} minDate= {moment().format("YYYY-MM-DD")} onDayPress={onDateSelected} />
+          <Calendar style={{ borderRadius: 20, overflow: 'hidden', padding: 20, borderWidth: 4, borderColor: '#4757B3', elevation: 4 }} enableSwipeMonths={true} minDate={moment().format("YYYY-MM-DD")} onDayPress={onDateSelected}
+            theme={{
+
+            arrowColor:'#4757B3',
+              todayTextColor:"#5C71E6",
+              monthTextColor:'#fff',
+              
+              'stylesheet.calendar.header': {
+                headerContainer: {
+                  flexDirection: 'row',
+                  
+                  backgroundColor: '#5C71E6',
+                  borderRadius: 12,
+                },
+                
+                dayTextAtIndex0: {
+                  color: 'red'
+                },
+                dayTextAtIndex6: {
+                  color: 'green'
+                }
+              }
+            }}
+
+          />
         </View>
       </Modal>
     );
@@ -72,7 +96,7 @@ const AddButton = () => {
   };
 
   const addDate = (day) => {
-    
+
     setDate(moment(day.dateString).format("YYYY-MM-DD"));
 
     setCalendarVisible(!isCalendar);
@@ -81,13 +105,13 @@ const AddButton = () => {
   const addTodo = () => {
     const addToday = moment().format("YYYY-MM-DD");
     const addTomorrow = moment().add(1, "days").format("YYYY-MM-DD");
+
    
-console.log(date)
-    if(text.trim() == "" || date == ""){
-     return Alert.alert('Error', 'Please Enter Task Name and Date');
+    if (text.trim() == "" || date == "") {
+      return Alert.alert('Error', 'Please Enter Task Name and Date');
     }
 
-   else if (addToday === date) {
+    else if (addToday === date) {
       const newTodo = {
         taskName: text,
         taskDescription: descriptionText,
@@ -110,7 +134,7 @@ console.log(date)
       // setTextInput('');
       setModalVisible(!isModalVisible);
     } else {
-      
+
       const newTodo = {
         taskName: text,
         taskDescription: descriptionText,
@@ -188,18 +212,18 @@ console.log(date)
                   value={descriptionText}
                   onChangeText={onChangeDescriptionText}
                 />
-                <View style = {{flexDirection:'row',alignItems:'center'}}>
-                <View style={styles.dateButton}>
-                  <Pressable onPress={toggleCalendar}>
-                    <Text style={styles.dateText}>Select Date</Text>
-                    <DatePicker
-                      visible={isCalendar}
-                      onDateSelected={(day) => addDate(day)}
-                    />
-                  </Pressable>
-                  
-                </View>
-                <Text style = {{marginLeft:20, fontSize:20, marginTop:18}}>{moment(date).format("DD MMM YYYY")}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <View style={styles.dateButton}>
+                    <Pressable onPress={toggleCalendar}>
+                      <Text style={styles.dateText}>Select Date</Text>
+                      <DatePicker
+                        visible={isCalendar}
+                        onDateSelected={(day) => addDate(day)}
+                      />
+                    </Pressable>
+
+                  </View>
+                  <Text style={{ marginLeft: 20, fontSize: 20, marginTop: 18 }}>{moment(date).format("DD MMM YYYY")}</Text>
                 </View>
               </View>
 

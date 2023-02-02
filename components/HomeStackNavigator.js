@@ -2,7 +2,7 @@
 // P2243564
 // DIT/FT/1B/02
 
-import { View, Text, StyleSheet, ScrollView, FlatList } from "react-native";
+import { View, Text, StyleSheet, ScrollView, FlatList, Pressable, Alert, Image } from "react-native";
 import React, { useState, createContext, useContext } from "react";
 import {
   widthPercentageToDP as wp,
@@ -12,6 +12,8 @@ import AddButton from "./AddButton";
 import Task from "./Task";
 import TaskDayButton from "./TaskDayButton";
 import { TaskContext } from "./Context";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+
 
 
 export const HomeStackNavigator = () => {
@@ -30,6 +32,8 @@ export const HomeStackNavigator = () => {
     completedTask,
     setCompletedTask,
   } = useContext(TaskContext);
+
+
 
   const todayPressed = () => {
     setTodaySelected(true);
@@ -57,6 +61,18 @@ export const HomeStackNavigator = () => {
     setTomorrowSelected(false);
     setUpcomingSelected(false);
     setCompletedSelected(true);
+  };
+
+  const clearAllCompleted = () => {
+    Alert.alert('Confirm', 'Clear Completed Tasks?', [
+      {
+        text: 'Yes',
+        onPress: () => setCompletedTask([]),
+      },
+      {
+        text: 'No',
+      },
+    ]);
   };
 
   return (
@@ -136,26 +152,37 @@ export const HomeStackNavigator = () => {
             </View>
 
             {isTodaySelected === true && (
-              <FlatList
-                data={todayTask}
-                renderItem={({ item }) => (
-                  <Task
-                    todayTask={todayTask}
-                    completedTask={completedTask}
-                    setCompletedTask={setCompletedTask}
-                    setTodayTask={setTodayTask}
-                    isChecked={item.isCompleted}
-                    id={item.id}
-                    text={item.taskName}
-                    datetext={item.date}
-                    description={item.taskDescription}
+              todayTask.length > 0 ? (
+                <FlatList
+                  data={todayTask}
+                  renderItem={({ item }) => (
+                    <Task
+                      todayTask={todayTask}
+                      completedTask={completedTask}
+                      setCompletedTask={setCompletedTask}
+                      setTodayTask={setTodayTask}
+                      isChecked={item.isCompleted}
+                      id={item.id}
+                      text={item.taskName}
+                      datetext={item.date}
+                      description={item.taskDescription}
+                    />
+                  )}
+                  keyExtractor={(item) => item.id}
+                />
+              ) : (
+                <View style={styles.emptyTask}>
+                  <Image
+                    style={{ width: 64, height: 64 }}
+                    source={{ uri: 'https://cdn-icons-png.flaticon.com/512/2171/2171990.png' }}
                   />
-                )}
-                keyExtractor={(item) => item.id}
-              />
+                  <Text style={styles.emptyTaskText}>Wow Much Empty!</Text>
+                </View>
+              )
             )}
 
             {isTomorrowSelected === true && (
+              tomorrowTask.length > 0 ? (
               <FlatList
                 data={tomorrowTask}
                 renderItem={({ item }) => (
@@ -172,10 +199,21 @@ export const HomeStackNavigator = () => {
                   />
                 )}
                 keyExtractor={(item) => item.id}
+                
               />
+              ) : (
+                <View style={styles.emptyTask}>
+                  <Image
+                    style={{ width: 64, height: 64 }}
+                    source={{ uri: 'https://cdn-icons-png.flaticon.com/512/2171/2171990.png' }}
+                  />
+                  <Text style={styles.emptyTaskText}>Wow Much Empty!</Text>
+                </View>
+              )
             )}
 
             {isUpcomingSelected === true && (
+               upcomingTask.length > 0 ? (
               <FlatList
                 data={upcomingTask}
                 renderItem={({ item }) => (
@@ -193,29 +231,64 @@ export const HomeStackNavigator = () => {
                 )}
                 keyExtractor={(item) => item.id}
               />
+               ) : (
+                <View style={styles.emptyTask}>
+                  <Image
+                    style={{ width: 64, height: 64 }}
+                    source={{ uri: 'https://cdn-icons-png.flaticon.com/512/2171/2171990.png' }}
+                  />
+                  <Text style={styles.emptyTaskText}>Wow Much Empty!</Text>
+                </View>
+              )
             )}
 
             {isCompletedSelected === true && (
-              <FlatList
-                data={completedTask}
-                renderItem={({ item }) => (
-                  <Task
-                    completed={completedTask}
-                    setCompletedTask={setCompletedTask}
-                    todayTask={todayTask}
-                    completedTask={completedTask}
-                    tomorrowTask={tomorrowTask}
-                    upcomingTask={upcomingTask}
-                    setUpcomingTask={setUpcomingTask}
-                    isChecked={item.isCompleted}
-                    id={item.id}
-                    text={item.taskName}
-                    datetext={item.date}
-                    description={item.taskDescription}
+              completedTask.length > 0 ? (
+              <View>
+
+                <FlatList
+                  data={completedTask}
+                  renderItem={({ item }) => (
+                    <Task
+                      completed={completedTask}
+                      setCompletedTask={setCompletedTask}
+                      todayTask={todayTask}
+                      completedTask={completedTask}
+                      tomorrowTask={tomorrowTask}
+                      upcomingTask={upcomingTask}
+                      setUpcomingTask={setUpcomingTask}
+                      isChecked={item.isCompleted}
+                      id={item.id}
+                      text={item.taskName}
+                      datetext={item.date}
+                      description={item.taskDescription}
+                    />
+                  )}
+                  keyExtractor={(item) => item.id}
+                /> 
+                <Pressable
+                  style={({ pressed }) => [
+                    {
+                      backgroundColor: pressed ? "#5C82B8" : "#6E9CDB",
+                    },
+                    styles.deletebutton,
+                  ]}
+                  onPress={clearAllCompleted}
+
+                >
+                  <MaterialCommunityIcons name="delete-empty" color={"#F8F8F8"} size={25} />
+                </Pressable>
+                
+              </View>
+              ) : (
+                <View style={styles.emptyTask}>
+                  <Image
+                    style={{ width: 64, height: 64 }}
+                    source={{ uri: 'https://cdn-icons-png.flaticon.com/512/2171/2171990.png' }}
                   />
-                )}
-                keyExtractor={(item) => item.id}
-              />
+                  <Text style={styles.emptyTaskText}>Wow Much Empty!</Text>
+                </View>
+              )
             )}
           </View>
         </View>
@@ -283,7 +356,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
+  deletebutton: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#e63946',
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    top: 340,
+    left: 295,
+    elevation: 7,
+  },
+
   dayTitle: {
     color: "#222B45",
   },
+
+  emptyTask: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  emptyTaskText: {
+    textAlign: "center", 
+    fontSize: 20, 
+    color: '#AAAAAA', 
+    marginTop: 10
+  }
 });

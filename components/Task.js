@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import ModalScreen from "./Modal";
+
 import moment from "moment";
 import Modal from "react-native-modal";
 import AddTaskModalButtons from "./AddTaskModalButtons";
@@ -89,6 +89,10 @@ const Task = (props) => {
 
   const updateTask = (newText, descriptionText, date, ischecked, id) => {
 
+    if(newText.length == 0){
+      return Alert.alert('Error', 'Task Name cannot be empty');
+    }
+
     if (props.datetext == moment().format("YYYY-MM-DD") &&
       props.isChecked == false) {
       updateTodayTask(newText, descriptionText, date, ischecked, id)
@@ -111,17 +115,7 @@ const Task = (props) => {
     setModalVisible(!isModalVisible);
   }
 
-  // const completeTask = (todoId) => {
-  //   const newTodosItem = props.todayTask.map((item) => {
-  //     if (item.id == todoId) {
-  //       return { ...item, isCompleted: true };
-  //     }
-  //     return item;
-  //   });
-
-  //   props.setCompletedTask(newTodosItem);
-  // };
-
+  
   const completeTask = (todoId) => {
     if (
       props.datetext == moment().format("YYYY-MM-DD") &&

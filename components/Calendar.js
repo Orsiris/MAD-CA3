@@ -2,7 +2,7 @@
 // P2243564
 // DIT/1B/02
 
-import React, { useState, useMemo, useContext } from "react";
+import React, { useContext } from "react";
 import { SafeAreaView, StyleSheet, View, Text } from "react-native";
 import { Agenda } from "react-native-calendars";
 import moment from "moment";
@@ -16,15 +16,14 @@ function CalendarPicker() {
     tomorrowTask,
     upcomingTask,
     completedTask,
-    
+
   } = useContext(TaskContext);
 
   allTasks = [];
-  // console.log(todayTask);
-  //  console.log(completedTask)
+
   allTasks = allTasks.concat(todayTask, tomorrowTask, upcomingTask, completedTask);
   const items = {};
-  
+
   allTasks.forEach((task) => {
     if (!items[task.date]) {
       items[task.date] = [];
@@ -37,48 +36,32 @@ function CalendarPicker() {
     });
   });
 
-  // console.log(allTasks)
-  // console.log(items)
-
-  // todayTask.forEach((task) => {
-  //   if (!items[task.date]) {
-  //     items[task.date] = [];
-  //   }
-  //   items[task.date].push({ name: task.taskName });
-  // });
-
-  // console.log(items)
-  // console.log(allTasks)
-
   return (
     <SafeAreaView style={styles.container}>
       <Agenda
-      theme={{
-        
-        agendaTodayColor: '#5C71E6',
-
-        
-      }}
+        theme={{
+          agendaTodayColor: '#5C71E6',
+        }}
         showClosingKnob={true}
         renderEmptyDate={() => {
           return (
             <View>
-            
+
             </View>
           );
         }}
         renderEmptyData={() => {
           return (
             <View>
-             
+
             </View>
           );
         }}
         selected={moment().format("YYYY-MM-DD")}
         items={items}
-        
+
         renderItem={(item) => {
-          
+
           return (
             <View style={styles.item}>
               <Text
@@ -113,14 +96,14 @@ const styles = StyleSheet.create({
   item: {
     backgroundColor: "white",
     flex: 1,
-   
-   elevation:4,
+
+    elevation: 4,
     marginRight: 10,
     marginTop: 17,
-    marginBottom:5,
+    marginBottom: 5,
     justifyContent: "center",
     alignItems: "center",
-    padding:14,
+    padding: 14,
   },
   itemText: {
     color: "black",

@@ -10,17 +10,20 @@ const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
   return (
-    <Tab.Navigator initialRouteName="Task" >
+    <Tab.Navigator initialRouteName="Task" screenOptions={{
+      tabBarStyle: {height:60},
+    }}>
       <Tab.Screen
         name={'Task'}
         component={HomeStackNavigator}
 
         options={{
           tabBarLabel: 'Task',
+          tabBarLabelStyle:{fontSize:14},
           headerShown: false,
 
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="clipboard-check-multiple-outline" color={color} size={size} />
+            <MaterialCommunityIcons name="clipboard-check-multiple-outline" color={color} size={24} />
           ),
 
         }}
@@ -31,6 +34,7 @@ const BottomTabNavigator = () => {
 
         options={{
           tabBarLabel: 'Calendar',
+          tabBarLabelStyle:{fontSize:14},
           headerShown: true,
           headerStyle: {
             backgroundColor: '#5C71E6',
@@ -40,7 +44,7 @@ const BottomTabNavigator = () => {
             <MaterialCommunityIcons
               name="calendar-outline"
               color={color}
-              size={size}
+              size={24}
             />
           ),
         }}
@@ -54,9 +58,7 @@ const styles = StyleSheet.create({
     color: '#292929',
     fontSize: 12,
   },
-  tabContainer: {
-    height: 60,
-  },
+  
 });
 
 export default BottomTabNavigator;

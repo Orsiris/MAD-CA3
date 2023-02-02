@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useContext } from "react";
+import React, { useState, useContext } from "react";
 import {
   StyleSheet,
   Pressable,
@@ -14,7 +14,6 @@ import Modal from "react-native-modal";
 import AddTaskModalButtons from "./AddTaskModalButtons";
 import { TextInput } from "react-native-paper";
 import { Calendar } from "react-native-calendars";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
 import { TaskContext } from "./Context";
 
@@ -34,8 +33,6 @@ const AddButton = () => {
     setTomorrowTask,
     upcomingTask,
     setUpcomingTask,
-    completedTask,
-    setCompletedTask,
   } = useContext(TaskContext);
 
   function DatePicker({ visible, onDateSelected }) {
@@ -79,18 +76,6 @@ const AddButton = () => {
     setDate(moment().format("YYYY-MM-DD"))
     setModalVisible(!isModalVisible);
   };
-
-  // const storeData = async (taskName, taskDescription) => {
-  //   try {
-
-  //     await AsyncStorage.setItem("taskName", taskName);
-  //     await AsyncStorage.setItem("taskDescription", taskDescription);
-  //     setModalVisible(!isModalVisible);
-  //   } catch (e) {
-  //     console.log("Error saving data", e);
-  //   }
-  // };
-
   const toggleCalendar = () => {
     setCalendarVisible(!isCalendar);
   };

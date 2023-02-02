@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import {StyleSheet, Pressable, Text, View} from "react-native";
+import React from "react";
+import {Pressable, Text} from "react-native";
 
 const TaskDayButton = (props) => {
   

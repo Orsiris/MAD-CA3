@@ -1,4 +1,4 @@
-[![Open in Codespaces](https://github.com/Orsiris/MAD-CA3)
+[![Open in Codespaces, (https://orsiris-scaling-broccoli-gvg7j496v5x2wjx4.github.dev/)](https://github.com/Orsiris/MAD-CA3)
 # MAD-CA3
 
 Run npx expo --tunnel to run the application on EXPO GO and then scan the QR code

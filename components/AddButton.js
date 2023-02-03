@@ -16,7 +16,7 @@ import { TextInput } from "react-native-paper";
 import { Calendar } from "react-native-calendars";
 import moment from "moment";
 import { TaskContext } from "./Context";
-
+import Toast from 'react-native-toast-message';
 const AddButton = () => {
   const [text, onChangeText] = React.useState("");
   const [descriptionText, onChangeDescriptionText] = React.useState("");
@@ -34,6 +34,17 @@ const AddButton = () => {
     upcomingTask,
     setUpcomingTask,
   } = useContext(TaskContext);
+
+  const showToast = () => {
+    Toast.show({
+      type: 'success',
+      position:'bottom',
+      
+    bottomOffset:160,
+      text1: 'Task Added! 💪💪💪',
+      text2:'Go Get em Tiger 🐯🐯🐯'
+    });
+  }
 
   function DatePicker({ visible, onDateSelected }) {
 
@@ -107,6 +118,7 @@ const AddButton = () => {
       setTodayTask([...todayTask, newTodo]);
       // setTextInput('');
       setModalVisible(!isModalVisible);
+      
     } else if (addTomorrow === date) {
       const newTodo = {
         taskName: text,
@@ -131,6 +143,7 @@ const AddButton = () => {
       // setTextInput('');
       setModalVisible(!isModalVisible);
     }
+    showToast();
   };
 
   return (

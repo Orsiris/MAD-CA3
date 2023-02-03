@@ -1,6 +1,6 @@
 
 
-import React, { useState, createContext, useContext, useEffect } from "react";
+import React, { useState, createContext, useContext, useEffect, useRef } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from "moment";
 export const TaskContext = createContext();
@@ -12,7 +12,7 @@ export const TaskProvider = (props) => {
   const [completedTask, setCompletedTask] = React.useState([]);
 
 
-
+  
   React.useEffect(() => {
     getTodayTask();
   }, []);
@@ -31,24 +31,30 @@ export const TaskProvider = (props) => {
 
   React.useEffect(() => {
     saveTodayTasks(todayTask);
+    console.log("saved")
   }, [todayTask]);
 
   React.useEffect(() => {
     saveTomorrowTasks(tomorrowTask);
+    console.log("saved")
   }, [tomorrowTask]);
 
   React.useEffect(() => {
     saveUpcomingTasks(upcomingTask);
+    console.log("saved")
   }, [upcomingTask]);
 
   React.useEffect(() => {
     saveCompletedTasks(completedTask);
+    console.log("saved")
   }, [completedTask]);
 
   const saveTodayTasks = async todayTask => {
     try {
+      
       const stringifyToday = JSON.stringify(todayTask);
       await AsyncStorage.setItem('Today', stringifyToday);
+      
     } catch (error) {
       console.log(error);
     }
@@ -56,8 +62,10 @@ export const TaskProvider = (props) => {
 
   const saveTomorrowTasks = async tomorrowTask => {
     try {
+      
       const stringifyTomorrow = JSON.stringify(tomorrowTask);
       await AsyncStorage.setItem('Tomorrow', stringifyTomorrow);
+      
     } catch (error) {
       console.log(error);
     }
@@ -66,6 +74,7 @@ export const TaskProvider = (props) => {
 
   const saveUpcomingTasks = async upcomingTask => {
     try {
+      
       const stringifyUpcoming = JSON.stringify(upcomingTask);
       await AsyncStorage.setItem('Upcoming', stringifyUpcoming);
     } catch (error) {
@@ -84,10 +93,13 @@ export const TaskProvider = (props) => {
 
   const getTodayTask = async () => {
     try {
+      
       const today = await AsyncStorage.getItem('Today');
+      
       if (today != null) {
         setTodayTask(JSON.parse(today));
       }
+     
     } catch (error) {
       console.log(error);
     }
@@ -108,7 +120,7 @@ export const TaskProvider = (props) => {
     try {
       const upcoming = await AsyncStorage.getItem('Upcoming');
       if (upcoming != null) {
-        setTodayTask(JSON.parse(upcoming));
+        setUpcomingTask(JSON.parse(upcoming));
       }
     } catch (error) {
       console.log(error);
@@ -119,7 +131,7 @@ export const TaskProvider = (props) => {
     try {
       const completed = await AsyncStorage.getItem('Completed');
       if (completed != null) {
-        setTodayTask(JSON.parse(completed));
+        setCompletedTask(JSON.parse(completed));
       }
     } catch (error) {
       console.log(error);
@@ -127,7 +139,7 @@ export const TaskProvider = (props) => {
   };
 
   const updateTodayTask = (newText, descriptionText, date, ischecked, id) => {
-    
+
     var Task = {
       taskName: newText,
       taskDescription: descriptionText,
@@ -135,53 +147,53 @@ export const TaskProvider = (props) => {
       isCompleted: ischecked,
       id: id
     }
-  
+
     const index = todayTask.findIndex(task => task.id === id);
     const newTodosItem = todayTask.filter((task) => task.id !== id);
 
     let newTask = [];
-    
 
-    if(date == moment().format("YYYY-MM-DD") &&
-    ischecked == false) {
+
+    if (date == moment().format("YYYY-MM-DD") &&
+      ischecked == false) {
 
       newTask = [...todayTask];
-    newTask[index] = Task
-    setTodayTask(newTask);
+      newTask[index] = Task
+      setTodayTask(newTask);
     }
 
-    else if(
+    else if (
       date == moment().add(1, "days").format("YYYY-MM-DD") &&
       ischecked == false
-    ){
-      
+    ) {
+
       setTodayTask(newTodosItem)
 
-     newTask = [...tomorrowTask, Task]
+      newTask = [...tomorrowTask, Task]
       setTomorrowTask(newTask)
     }
 
-    else if(
+    else if (
       date > moment().add(1, "days").format("YYYY-MM-DD") &&
       ischecked == false
-    ){
-      
+    ) {
+
       setTodayTask(newTodosItem)
 
-     newTask = [...upcomingTask, Task]
+      newTask = [...upcomingTask, Task]
       setUpcomingTask(newTask)
     }
 
-    else{
+    else {
       newTask = [...completedTask];
-    newTask[index] = Task
-    setCompletedTask(newTask);
+      newTask[index] = Task
+      setCompletedTask(newTask);
     }
 
   }
 
   const updateTomorrowTask = (newText, descriptionText, date, ischecked, id) => {
-    
+
     var Task = {
       taskName: newText,
       taskDescription: descriptionText,
@@ -193,51 +205,51 @@ export const TaskProvider = (props) => {
     const index = tomorrowTask.findIndex(task => task.id === id);
     const newTodosItem = tomorrowTask.filter((task) => task.id !== id);
 
-    if(date == moment().format("YYYY-MM-DD") &&
-    ischecked == false) {
+    if (date == moment().format("YYYY-MM-DD") &&
+      ischecked == false) {
 
       setTomorrowTask(newTodosItem)
 
       newTask = [...todayTask, Task]
-       setTodayTask(newTask)
+      setTodayTask(newTask)
     }
 
-    else if(
+    else if (
       date == moment().add(1, "days").format("YYYY-MM-DD") &&
       ischecked == false
-    ){
-      
+    ) {
+
       let newTask = [];
 
-    newTask = [...tomorrowTask];
-    newTask[index] = Task
-    setTomorrowTask(newTask);
+      newTask = [...tomorrowTask];
+      newTask[index] = Task
+      setTomorrowTask(newTask);
     }
 
-    else if(
+    else if (
       date > moment().add(1, "days").format("YYYY-MM-DD") &&
       ischecked == false
-    ){
+    ) {
       console.log("nigger")
       setTomorrowTask(newTodosItem)
 
-     newTask = [...upcomingTask, Task]
+      newTask = [...upcomingTask, Task]
       setUpcomingTask(newTask)
     }
 
-    else{
+    else {
       newTask = [...completedTask];
-    newTask[index] = Task
-    setCompletedTask(newTask);
+      newTask[index] = Task
+      setCompletedTask(newTask);
     }
 
 
-    
+
 
   }
 
   const updateUpcomingTask = (newText, descriptionText, date, ischecked, id) => {
-    
+
     var Task = {
       taskName: newText,
       taskDescription: descriptionText,
@@ -251,49 +263,49 @@ export const TaskProvider = (props) => {
 
     let newTask = [];
 
-    if(date == moment().format("YYYY-MM-DD") &&
-    ischecked == false) {
+    if (date == moment().format("YYYY-MM-DD") &&
+      ischecked == false) {
 
       setUpcomingTask(newTodosItem)
 
       newTask = [...upcomingTask, Task]
-       setTodayTask(newTask)
+      setTodayTask(newTask)
     }
 
-    else if(
+    else if (
       date == moment().add(1, "days").format("YYYY-MM-DD") &&
       ischecked == false
-    ){
-      
+    ) {
+
       let newTask = [];
 
-    newTask = [...tomorrowTask];
-    newTask[index] = Task
-    setTomorrowTask(newTask);
+      newTask = [...tomorrowTask];
+      newTask[index] = Task
+      setTomorrowTask(newTask);
     }
 
-    else if(
+    else if (
       date > moment().add(1, "days").format("YYYY-MM-DD") &&
       ischecked == false
-    ){
-      
-     newTask = [...upcomingTask];
-    newTask[index] = Task
-    setUpcomingTask(newTask);
+    ) {
+
+      newTask = [...upcomingTask];
+      newTask[index] = Task
+      setUpcomingTask(newTask);
     }
 
-    else{
+    else {
       newTask = [...completedTask];
-    newTask[index] = Task
-    setCompletedTask(newTask);
+      newTask[index] = Task
+      setCompletedTask(newTask);
     }
 
-    
+
 
   }
 
   const updateCompletedTask = (newText, descriptionText, date, ischecked, id) => {
-    
+
     var Task = {
       taskName: newText,
       taskDescription: descriptionText,
@@ -311,7 +323,7 @@ export const TaskProvider = (props) => {
     setCompletedTask(newTask);
 
   }
-  
+
 
   return (
     <TaskContext.Provider

@@ -14,6 +14,7 @@ import AddTaskModalButtons from "./AddTaskModalButtons";
 import { TextInput } from "react-native-paper";
 import { Calendar } from "react-native-calendars";
 import { TaskContext } from "./Context";
+import Toast from 'react-native-toast-message';
 
 const Task = (props) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -35,6 +36,50 @@ const Task = (props) => {
     updateUpcomingTask,
     updateCompletedTask
   } = useContext(TaskContext);
+
+  const showDeleteToast = () => {
+    Toast.show({
+      type: 'error',
+      position:'bottom',
+      
+    bottomOffset:160,
+      text1: 'Task Deleted 😭😭😭',
+      
+    });
+  }
+
+  const showSuccessToast = () => {
+    Toast.show({
+      type: 'success',
+      position:'bottom',
+      
+    bottomOffset:160,
+      text1: 'Task Completed 🎉🥳',
+      
+    });
+  }
+
+  const showUpdatedToast = () => {
+    Toast.show({
+      type: 'success',
+      position:'bottom',
+      
+    bottomOffset:160,
+      text1: 'Task Updated 😃😃😃',
+      
+    });
+  }
+
+  const unCompleteToast = () => {
+    Toast.show({
+      type: 'error',
+      position:'bottom',
+      
+    bottomOffset:160,
+      text1: 'Task Unchecked 😡😡😡',
+      
+    });
+  }
 
   function DatePicker({ visible, onDateSelected }) {
 
@@ -88,7 +133,7 @@ const Task = (props) => {
   };
 
   const updateTask = (newText, descriptionText, date, ischecked, id) => {
-
+   
     if(newText.length == 0){
       return Alert.alert('Error', 'Task Name cannot be empty');
     }
@@ -111,7 +156,7 @@ const Task = (props) => {
     else {
       updateCompletedTask(newText, descriptionText, date, ischecked, id)
     }
-
+    showUpdatedToast()
     setModalVisible(!isModalVisible);
   }
 
@@ -136,6 +181,7 @@ const Task = (props) => {
       };
 
       setCompletedTask([...completedTask, completedItem]);
+      showSuccessToast()
     } else if (
       props.datetext == moment().add(1, "days").format("YYYY-MM-DD") &&
       props.isChecked == false
@@ -155,6 +201,7 @@ const Task = (props) => {
       };
 
       setCompletedTask([...completedTask, completedItem]);
+      showSuccessToast()
     } else if (
       props.datetext > moment().add(1, "days").format("YYYY-MM-DD") &&
       props.isChecked == false
@@ -174,6 +221,7 @@ const Task = (props) => {
       };
 
       setCompletedTask([...completedTask, completedItem]);
+      showSuccessToast()
     } else {
       const filteredItem = completedTask.find((item) => item.id === todoId);
 
@@ -200,10 +248,13 @@ const Task = (props) => {
       ) {
         setUpcomingTask([...upcomingTask, completedItem]);
       }
+      unCompleteToast();
     }
+    
   };
 
   const deleteTodo = (todoId) => {
+    showDeleteToast();
     if (
       props.datetext == moment().format("YYYY-MM-DD") &&
       props.isChecked == false
@@ -235,7 +286,7 @@ const Task = (props) => {
       <View style={styles.task}>
         <BouncyCheckbox
           size={28}
-          fillColor="#A4AEEA"
+          fillColor="#4757B3"
           unfillColor="#FFFFFF"
           innerIconStyle={{ borderWidth: 2 }}
           textStyle={{

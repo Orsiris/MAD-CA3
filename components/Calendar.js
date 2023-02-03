@@ -7,18 +7,20 @@ import { SafeAreaView, StyleSheet, View, Text } from "react-native";
 import { Agenda } from "react-native-calendars";
 import moment from "moment";
 import { TaskContext } from "./Context";
-
+import Task from "./Task";
 moment().format();
 
 function CalendarPicker() {
   const {
     todayTask,
+    setTodayTask,
     tomorrowTask,
+    setTomorrowTask,
     upcomingTask,
+    setUpcomingTask,
     completedTask,
-
+    setCompletedTask,
   } = useContext(TaskContext);
-
   allTasks = [];
 
   allTasks = allTasks.concat(todayTask, tomorrowTask, upcomingTask, completedTask);
@@ -59,24 +61,24 @@ function CalendarPicker() {
         }}
         selected={moment().format("YYYY-MM-DD")}
         items={items}
-
+        showOnlySelectedDayItems = {true}
         renderItem={(item) => {
 
           return (
-            <View style={styles.item}>
-              <Text
-                style={[
-                  styles.itemText,
-                  {
-                    textDecorationLine: item.isCompleted
-                      ? "line-through"
-                      : "none",
-                  },
-                ]}
-              >
-                {item.taskName}
-              </Text>
-            </View>
+            <Task
+                      completed={completedTask}
+                      setCompletedTask={setCompletedTask}
+                      todayTask={todayTask}
+                      completedTask={completedTask}
+                      tomorrowTask={tomorrowTask}
+                      upcomingTask={upcomingTask}
+                      setUpcomingTask={setUpcomingTask}
+                      isChecked={item.isCompleted}
+                      id={item.id}
+                      text={item.taskName}
+                      datetext={item.date}
+                      description={item.taskDescription}
+                    />
           );
         }}
         reservationsKeyExtractor={(item) => {

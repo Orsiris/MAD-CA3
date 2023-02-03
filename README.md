@@ -9,6 +9,7 @@ P2243564 Wong Wei Jun Daniel
 2. Add Task Modal and Functionality
 3. Calendar Screen and Functionality
 4. Edit Task Screen Functionality
+5. Complete Tasks Functionality
 
 CONTRIBUTION: 50%
 

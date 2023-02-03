@@ -1,6 +1,8 @@
 [![Open in Codespaces](https://github.com/Orsiris/MAD-CA3)
 # MAD-CA3
 
+Run npx expo --tunnel to run the application on EXPO GO and then scan the QR code
+you may need to run yarn add expo first if running npx expo --tunnel gives you an error
 
 P2243564 Wong Wei Jun Daniel
 1. Task Screens Functionality

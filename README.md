@@ -1,2 +1,21 @@
-[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-f4981d0f882b2a3f0472912d15f9806d57e124e0fc890972558857b51b24a6f9.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=9516735)
+[![Open in Codespaces](https://github.com/Orsiris/MAD-CA3)
 # MAD-CA3
+
+
+P2243564 Wong Wei Jun Daniel
+1. Task Screens Functionality
+2. Add Task Modal and Functionality
+3. Calendar Screen and Functionality
+4. Edit Task Screen Functionality
+
+CONTRIBUTION: 50%
+
+p2227676 Xavier Chee Hongyi
+1. Feedback Screen Functionality
+2. Settings Screen Functionality
+3. Edit Task Screen Functionality
+4. Complete Tasks Functionality
+
+CONTRIBUTION: 50%
+
+TOTAL CONTRIBUTION: 100%
